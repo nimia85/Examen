@@ -1,0 +1,77 @@
+﻿@{
+    //DEFINIR NUESTRAS VARIABLES
+
+    var Nombre = "";
+    var Apellido = "";
+    DateTime Fecha_inscripcion = DateTime.Now;
+   
+    if(IsPost)
+    {
+        //recupero los datos del html y los asigno
+        //las variables donde quiero guardar
+        Nombre = Request["nombre"];
+        Apellido = Request["apellido"];
+
+        //valido que no esten vacio los campos
+        Validation.RequireFields("nombre", "apellido");
+
+        //defino mis variables para la consulta SQL
+        var SQLINSERT = "INSERT INTO Alumno (Nombre, Apellido, Fecha_inscripcion) VALUES(@0, @1, @2)";
+        
+         if (Validation.IsValid())
+        {
+            try
+            {
+                //ABRIR LA CONEXION A LA BASE DE DATOS
+                var db= Database.Open("CONIN");
+                
+                //EJECUTAR LA CONSULTA
+               db.Execute(SQLINSERT, Nombre, Apellido, Fecha_inscripcion);
+                
+                //UN MENSAJE SIMPLE DE QUE SE GUARDO CORRECTAMENTE
+                Response.Write("Datos Guardados");
+
+
+                Response.Redirect("Create.cshtml");
+            }
+            catch (Exception ex)
+            {
+                //LANSA UN MENSAJE EN EL CASO DE ERROR
+                Response.Write(ex.Message);
+                
+            }
+            }          
+   
+}
+
+
+<form method="post">
+    <fieldset>
+        <legend>INSERTAR DATOS</legend>
+        @Html.ValidationSummary(true)
+
+        <div>
+            <label>NOMBRE DEL ALUMNO</label>
+            @*TEXTBOX PARA INGRESAR NOMBRE DEL ALUMNO*@
+            <input type ="text" name="nombre" value="@Nombre"/>
+            @*VALIDAR QUE NO ESTEE VACIO*@
+            @Html.ValidationMessage("Nombre")
+        </div>
+
+        <div>
+        <label>APELLIDO DEL ALUMNO</label>
+        <input type ="text" name="apellido" value="@Apellido"/>
+        @Html.ValidationMessage("Apellido")
+        </div>
+        @*BOTON GUARDAR*@
+        <input type="submit" value="GUARDAR" />
+
+    </fieldset>
+</form>
+    
+        
+        
+        
+        
+        
+}

@@ -1,0 +1,35 @@
+﻿@{
+    var db = Database.Open("conn");
+    var SQLSELECT= "SELECT id_alu, Nombre, Apellido, Fecha_inscripcion from alumno";
+    var data= db.Query (SQLSELECT);
+    var grilla= new WebGrid (source:data, rowsPerPage:10);
+    
+    
+
+    
+        
+    
+}
+
+
+    <!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+
+       
+        @grilla.GetHtml(columns:grilla.Columns(
+        grilla.Column("id_alu", "Id", format: @<a href="#">@item.id_alu</a>),
+        grilla.Column("Nombre", "Nombre", format: @<span>@item.Nombre</span>),
+        grilla.Column("Apellido", "Apellido", format: @<span>@item.Apellido</span>),
+        grilla.Column("Fecha_inscripcion", "Fecha", format: @<span>@item.Fecha_inscripcion</span>)
+        ))
+        
+
+
+        
+   
+</body>
+</html>
